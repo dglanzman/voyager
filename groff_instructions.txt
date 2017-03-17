@@ -1,0 +1,1 @@
+groff -T[ps|ascii|utf8] -man f.man > f.[ps|txt]

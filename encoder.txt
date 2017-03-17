@@ -1,0 +1,42 @@
+ENCODER(1)                  General Commands Manual                 ENCODER(1)
+
+
+
+NNAAMMEE
+       encoder - encoder for the Voyager's Reed-Solomon code
+
+SSYYNNOOPPSSYYSS
+       eennccooddeerr [ -f _i_n_f_i_l_e ] [-o _o_u_t_f_i_l_e ]
+
+DDEESSCCRRIIPPTTIIOONN
+       eennccooddeerr  encodes  a  message  or  data stream using the Voyager Probe's
+       Reed-Solomon code, which takes messages of 223 bytes and produces code-
+       words  of  255  bytes. nnooiissee can introduce errors to the codewords, and
+       ddeeccooddee can be used to recover the  messages  from  the  codewords.  The
+       encoder  will  pad  messages less than the 223 byte message length with
+       zero-valued bytes.
+
+   OOppttiioonnss
+       --ff _i_n_f_i_l_e
+              Instead of reading  from  standard  input,  read  messages  from
+              _i_n_f_i_l_e
+
+       --oo _o_u_t_f_i_l_e
+              Instead  of  writing to standard output, write codewords to _o_u_t_-
+              _f_i_l_e
+
+AAUUTTHHOORR
+       Written by David Lawrence Glanzman
+
+CCOOPPYYRRIIGGHHTT
+       Copyright 2017 David Lawrence Glanzman. License GPLv3+: GNU GPL version
+       3  or  later <http://gnu.org/licenses/gpl.html>. This is free software:
+       you are free to change and redistribute it. There is  NO  WARRANTY,  to
+       the extent permitted by law.
+
+SSEEEE AALLSSOO
+       decoder(1), noise(1)
+
+
+
+                                  17 March 17                       ENCODER(1)
