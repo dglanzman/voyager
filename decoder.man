@@ -1,0 +1,27 @@
+.TH ENCODER 1 "17 March 17"
+.SH NAME
+decoder \- decoder for the Voyager's Reed-Solomon code
+.SH SYNOPSYS
+\fBdecoder\fP [ -f \fIinfile\fP ] [-o \fIoutfile\fP ]
+.SH DESCRIPTION
+\fBdecoder\fP decodes a transmission of codewords using the Voyager Probe's
+Reed-Solomon code, which uses codewords of 223 bytes for messages of 255 bytes
+\fBnoise\fP can introduce errors to the codewords, and \fBencode\fP can
+produce codewords from a plaintext message. The decoder will write to standard
+error for any codewords it recieves that it cannot decode.
+.SS Options
+.TP
+\fB-f \fIinfile\fR
+Instead of reading from standard input, read codewords from \fIinfile\fP
+.TP
+\fB-o \fIoutfile\fR
+Instead of writing to standard output, write decoded text to \fIoutfile\fP
+.SH AUTHOR
+Written by David Lawrence Glanzman
+.SH COPYRIGHT
+Copyright 2017 David Lawrence Glanzman. License GPLv3+: GNU GPL version 3 or
+later <http://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
+law.
+.SH "SEE ALSO"
+encoder(1), noise(1)
