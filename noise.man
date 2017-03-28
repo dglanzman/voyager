@@ -1,0 +1,24 @@
+.TH NOISE 1 "17 March 17"
+.SH NAME
+noise \- error source for testing the Voyager's Reed-Solomon code
+.SH SYNOPSYS
+\fBnoise\fP [ -f \fIinfile\fP ] [-o \fIoutfile\fP ] {-u \fImean\fP -v
+\fIvariance\fP} | -l [locations]
+.SH DESCRIPTION
+\fBnoise\fP adds single-bit errors to a stream of bytes. 
+.SS Options
+.TP
+\fB-f \fIinfile\fR
+Instead of reading from standard input, read from \fIinfile\fP
+.TP
+\fB-o \fIoutfile\fR
+Instead of writing to standard output, write decoded text to \fIoutfile\fP
+.SH AUTHOR
+Written by David Lawrence Glanzman
+.SH COPYRIGHT
+Copyright 2017 David Lawrence Glanzman. License GPLv3+: GNU GPL version 3 or
+later <http://gnu.org/licenses/gpl.html>. This is free software: you are free
+to change and redistribute it. There is NO WARRANTY, to the extent permitted by
+law.
+.SH "SEE ALSO"
+encoder(1), decoder(1)
