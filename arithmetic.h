@@ -3,5 +3,6 @@
 
 unsigned char sum(unsigned char x, unsigned char y);
 unsigned char multiply(unsigned char x, unsigned char y);
+unsigned char divide(unsigned char x, unsigned char y);
 
 #endif

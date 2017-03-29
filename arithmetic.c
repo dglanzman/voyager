@@ -16,3 +16,16 @@ unsigned char multiply(unsigned char x, unsigned char y) {
   }
   return alpha[za];
 }
+
+unsigned char divide(unsigned char x, unsigned char y) {
+  unsigned char xa, ya, za;
+  if (!x || !y) return 0;
+  xa = poly[x];
+  ya = poly[y];
+  if ((int)xa - ya < 0) {
+    za = (int)xa - ya + 255;
+  } else {
+    za = xa - ya;
+  }
+  return alpha[za];
+}
