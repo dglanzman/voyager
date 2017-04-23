@@ -1,4 +1,6 @@
 #include "alpha.h"
+#include <assert.h>
+#include <stdlib.h>
 
 unsigned char sum(unsigned char x, unsigned char y) {
   return x ^ y;
@@ -19,7 +21,8 @@ unsigned char multiply(unsigned char x, unsigned char y) {
 
 unsigned char divide(unsigned char x, unsigned char y) {
   unsigned char xa, ya, za;
-  if (!x || !y) return 0;
+  if (!y) abort();
+  if (!x) return 0;
   xa = poly[x];
   ya = poly[y];
   if ((int)xa - ya < 0) {
