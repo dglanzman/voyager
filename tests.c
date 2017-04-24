@@ -1,5 +1,6 @@
 #include "alpha.h"
 #include "arithmetic.h"
+#include "generator.h"
 
 #include <stdarg.h>
 #include <stddef.h>
@@ -50,12 +51,25 @@ static void test_divide(void ** state) {
   assert_int_equal(result, 64);
 }
 
+static void test_genpoly(void ** state) {
+  unsigned char res[] = 
+    {45, 216, 239, 24, 253, 104, 27, 40,
+     107, 50, 163, 210, 227, 134, 224, 158,
+     119, 13, 158, 1, 238, 164, 82, 43, 15,
+     232, 246, 142, 50, 189, 29, 232, 1};
+
+  for (int i = 0; i < sizeof res; i++) {
+    assert_int_equal(generator_polynomial[i], res[i]);
+  }
+}
+
 int main() {
-  gen_log_tables();
+  init_generator();
   const struct CMUnitTest tests[] = {
     cmocka_unit_test(test_sum),
     cmocka_unit_test(test_multiply),
     cmocka_unit_test(test_divide),
+    cmocka_unit_test(test_genpoly),
   };
 
   return cmocka_run_group_tests(tests, NULL, NULL);
