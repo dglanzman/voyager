@@ -1,7 +1,12 @@
 #include "alpha.h"
 #include "arithmetic.h"
+#include "linear_algebra.h"
 #include "generator.h"
 
+extern unsigned char message[223];
+extern unsigned char codeword[255];
+
+#include <stdio.h>
 #include <stdarg.h>
 #include <stddef.h>
 #include <setjmp.h>
@@ -58,8 +63,22 @@ static void test_genpoly(void ** state) {
      119, 13, 158, 1, 238, 164, 82, 43, 15,
      232, 246, 142, 50, 189, 29, 232, 1};
 
+  for (int i = 0; i < sizeof res / 2; i++) {
+    unsigned char tmp = res[i];
+    res[i] = res[sizeof res - 1 - i];
+    res[sizeof res - 1 - i] = tmp;
+  }
+
   for (int i = 0; i < sizeof res; i++) {
     assert_int_equal(generator_polynomial[i], res[i]);
+  }
+}
+
+static void test_encode_1(void ** state) {
+  unsigned char computed_codeword[255];
+  inner_product_set(computed_codeword, generator_matrix, message, 223, 255);
+  for (int i = 0; i < sizeof computed_codeword; i++) {
+    assert_int_equal(computed_codeword[i], codeword[i]);
   }
 }
 
@@ -70,6 +89,7 @@ int main() {
     cmocka_unit_test(test_multiply),
     cmocka_unit_test(test_divide),
     cmocka_unit_test(test_genpoly),
+    cmocka_unit_test(test_encode_1),
   };
 
   return cmocka_run_group_tests(tests, NULL, NULL);
