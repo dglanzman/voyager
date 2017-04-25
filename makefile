@@ -1,17 +1,17 @@
-all: main
+all: encoder tests
 
 %.o: %.c
-	cc -c --std=c99 -g -o $@ $<
+	c99 -c -g -o $@ $<
 
-main: main.o arithmetic.o alpha.o linear_algebra.o generator.o
-	cc --std=c99 -g -o $@ $^
+encoder: encoder.o arithmetic.o alpha.o linear_algebra.o generator.o
+	c99 -g -o $@ $^
 
 tests: arithmetic.o alpha.o tests.o linear_algebra.o generator.o test_message.o test_codeword.o
-	cc --std=c99 -g -o $@ `pkg-config --cflags --libs cmocka` $^
+	c99 -g -o $@ $^ `pkg-config --cflags --libs cmocka`
 
 clean:
 	rm -f *.o
-	rm -f main
+	rm -f encoder
 	rm -f tests
 
 .PHONY: clean
