@@ -63,12 +63,6 @@ static void test_genpoly(void ** state) {
      119, 13, 158, 1, 238, 164, 82, 43, 15,
      232, 246, 142, 50, 189, 29, 232, 1};
 
-  for (int i = 0; i < sizeof res / 2; i++) {
-    unsigned char tmp = res[i];
-    res[i] = res[sizeof res - 1 - i];
-    res[sizeof res - 1 - i] = tmp;
-  }
-
   for (int i = 0; i < sizeof res; i++) {
     assert_int_equal(generator_polynomial[i], res[i]);
   }
@@ -82,14 +76,29 @@ static void test_encode_1(void ** state) {
   }
 }
 
+static void test_eval_at_alpha(void ** state) {
+  assert_int_equal(inner_product(codeword, alpha, sizeof alpha), 0);
+}
+
 int main() {
   init_generator();
+  for (int i = 0; i < sizeof message / 2; i++) {
+    unsigned char tmp = message[i];
+    message[i] = message[sizeof message - 1 - i];
+    message[sizeof message - 1 - i] = tmp;
+  }
+  for (int i = 0; i < sizeof codeword / 2; i++) {
+    unsigned char tmp = codeword[i];
+    codeword[i] = codeword[sizeof codeword - 1 - i];
+    codeword[sizeof codeword - 1 - i] = tmp;
+  }
   const struct CMUnitTest tests[] = {
     cmocka_unit_test(test_sum),
     cmocka_unit_test(test_multiply),
     cmocka_unit_test(test_divide),
     cmocka_unit_test(test_genpoly),
     cmocka_unit_test(test_encode_1),
+    cmocka_unit_test(test_eval_at_alpha),
   };
 
   return cmocka_run_group_tests(tests, NULL, NULL);

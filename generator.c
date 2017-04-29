@@ -29,11 +29,5 @@ void init_generator() {
     inner_product_set(generator_polynomial, conv_matrix,
       generator_polynomial, i, i+1);
   }
-  int max = sizeof generator_polynomial - 1;
-  for (int i = 0; i < sizeof generator_polynomial / 2; i++) {
-    unsigned char tmp = generator_polynomial[i];
-    generator_polynomial[i] = generator_polynomial[max-i];
-    generator_polynomial[max-i] = tmp;
-  }
   gen_conv_matrix(generator_polynomial, generator_matrix, 32, 254);
 }
