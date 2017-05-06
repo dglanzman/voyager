@@ -4,7 +4,7 @@
 #include <errno.h>
 #include <string.h> // for memset
 #include "generator.h"
-#include "linear_algebra.h"
+#include "arithmetic.h"
 
 int main(int argc, char * argv[]) {
   init_generator();

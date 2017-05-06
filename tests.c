@@ -1,6 +1,5 @@
 #include "alpha.h"
 #include "arithmetic.h"
-#include "linear_algebra.h"
 #include "generator.h"
 
 extern unsigned char message[223];
@@ -81,6 +80,7 @@ static void test_eval_at_alpha(void ** state) {
 }
 
 int main() {
+  gen_log_tables();
   init_generator();
   for (int i = 0; i < sizeof message / 2; i++) {
     unsigned char tmp = message[i];
