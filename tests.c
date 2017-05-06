@@ -79,6 +79,40 @@ static void test_eval_at_alpha(void ** state) {
   assert_int_equal(inner_product(codeword, alpha, sizeof alpha), 0);
 }
 
+static void test_polydiv_1(void ** state) {
+  unsigned char p1[] = {4, 1, 0, 1};
+  unsigned char p2[] = {1, 1};
+  unsigned char q[3];
+  unsigned char r[1];
+  divide_polynomial(p1, p2, q, r, sizeof p1, sizeof p2);
+  assert_int_equal(q[0], 0);
+  assert_int_equal(q[1], 1);
+  assert_int_equal(q[2], 1);
+  assert_int_equal(r[0], 4);
+}
+
+static void test_polydiv_2(void ** state) {
+  unsigned char p1[] = {30, 21, 99, 3};
+  unsigned char p2[] = {250};
+  unsigned char q[4];
+  unsigned char q_expect[] = {127, 73, 241, 37};
+  unsigned char * r = NULL;
+  divide_polynomial(p1, p2, q, r, sizeof p1, sizeof p2);
+  for (int i = 0; i < sizeof q; i++)
+    assert_int_equal(q[i], q_expect[i]);
+}
+
+static void test_polydiv_3(void ** state) {
+  unsigned char p1[] = {30, 21};
+  unsigned char p2[] = {5, 5, 5, 5};
+  unsigned char r[2];
+  unsigned char r_expect[] = {30, 21};
+  unsigned char * q = NULL;
+  divide_polynomial(p1, p2, q, r, sizeof p1, sizeof p2);
+  for (int i = 0; i < sizeof r; i++)
+    assert_int_equal(r[i], r_expect[i]);
+}
+
 int main() {
   gen_log_tables();
   init_generator();
@@ -99,6 +133,9 @@ int main() {
     cmocka_unit_test(test_genpoly),
     cmocka_unit_test(test_encode_1),
     cmocka_unit_test(test_eval_at_alpha),
+    cmocka_unit_test(test_polydiv_1),
+    cmocka_unit_test(test_polydiv_2),
+    cmocka_unit_test(test_polydiv_3),
   };
 
   return cmocka_run_group_tests(tests, NULL, NULL);

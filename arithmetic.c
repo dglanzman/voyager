@@ -84,7 +84,8 @@ void divide_polynomial(unsigned char * dividend, unsigned char * divisor,
   if (!quotient_divisor_product) abort(); 
   unsigned char * product_dividend_difference = malloc(dividend_len);
   if (!product_dividend_difference) abort(); 
-  unsigned char * divisor_conv = malloc(divisor_len * dividend_len);
+  unsigned char * divisor_conv = malloc(dividend_len * (dividend_len +
+    divisor_len - 1));
   if (!divisor_conv) abort();
   size_t quotient_len = dividend_len - (divisor_len - 1);
   memset(quotient, 0, quotient_len);
@@ -103,14 +104,17 @@ void divide_polynomial(unsigned char * dividend, unsigned char * divisor,
       if (diff_greatest_nonzero == -1) break;
       if (product_dividend_difference[diff_greatest_nonzero]) break;
     }
-    if (diff_greatest_nonzero < divisor_len - 1) {
+    if (diff_greatest_nonzero < (int)divisor_len - 1) {
       for (int i = 0; i <= diff_greatest_nonzero; i++) {
         remainder[i] = product_dividend_difference[i];
       }
+      free(quotient_divisor_product);
+      free(product_dividend_difference);
+      free(divisor_conv);
       return;
     }
     unsigned char factor = divide(product_dividend_difference[diff_greatest_nonzero],
-      dividend[dividend_len - 1]);
-    quotient[diff_greatest_nonzero - dividend_len - 1] = factor;
+      divisor[divisor_len - 1]);
+    quotient[diff_greatest_nonzero - (divisor_len - 1)] = factor;
   }
 }
