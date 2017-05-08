@@ -113,6 +113,14 @@ static void test_polydiv_3(void ** state) {
     assert_int_equal(r[i], r_expect[i]);
 }
 
+static void test_syndromes_1(void ** state) {
+  unsigned char syn[32];
+  syndromes(codeword, syn);
+  for (int i = 0; i < 32; i++) {
+    assert_int_equal(syn[i], 0);
+  }
+}
+
 int main() {
   gen_log_tables();
   init_generator();
@@ -136,6 +144,7 @@ int main() {
     cmocka_unit_test(test_polydiv_1),
     cmocka_unit_test(test_polydiv_2),
     cmocka_unit_test(test_polydiv_3),
+    cmocka_unit_test(test_syndromes_1),
   };
 
   return cmocka_run_group_tests(tests, NULL, NULL);
