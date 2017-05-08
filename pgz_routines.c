@@ -2,8 +2,9 @@
 #include "arithmetic.h"
 #include <string.h>
 #include <stdlib.h>
+#include "pgz_routines.h"
 
-unsigned char poly_eval(unsigned char * poly, size_t len, unsigned char at) {
+static unsigned char poly_eval(unsigned char * poly, size_t len, unsigned char at) {
   if (len == 1) return *poly;
   unsigned char * x = malloc(len);
   if (!x) abort();
@@ -13,7 +14,9 @@ unsigned char poly_eval(unsigned char * poly, size_t len, unsigned char at) {
     x[i] = at;
     at = multiply(at, at_copy);
   }
-  return inner_product(poly, x, len);
+  unsigned char ret = inner_product(poly, x, len);
+  free(x);
+  return ret;
 }
 
 void syndromes(unsigned char * recv_word, unsigned char * synd) {
@@ -22,7 +25,7 @@ void syndromes(unsigned char * recv_word, unsigned char * synd) {
   }
 }
 
-void swap_rows(unsigned char * matrix, size_t len, int row1, int row2) {
+static void swap_rows(unsigned char * matrix, size_t len, int row1, int row2) {
   unsigned char tmp;
   for (int i = 0; i < len; i++) {
     tmp = matrix[row1 * len + i];
@@ -31,7 +34,7 @@ void swap_rows(unsigned char * matrix, size_t len, int row1, int row2) {
   }
 } 
 
-void sort_rows(unsigned char * m, size_t len) {
+static void sort_rows(unsigned char * m, size_t len) {
   size_t init = 0;
   for (int x = 0; x < len; x++) {
     int uy = init;
@@ -50,9 +53,9 @@ void sort_rows(unsigned char * m, size_t len) {
   }
 }
 
-void upper_triangle(unsigned char * matrix, size_t len) {
+static void upper_triangle(unsigned char * matrix, size_t len) {
   sort_rows(matrix, len);
-  for (y = 0; y < len; y++) {
+  for (int y = 0; y < len; y++) {
     int x = 0;
     while (!matrix[y*len + x]) {
       x++;
@@ -75,10 +78,10 @@ void upper_triangle(unsigned char * matrix, size_t len) {
   }
 }
 
-int singular(unsigned char * mtx, size_t len) {
-  unsigned char * copy = malloc(len);
+static int singular(unsigned char * mtx, size_t len) {
+  unsigned char * copy = malloc(len*len);
   if (!copy) abort();
-  memcpy(copy, mtx, len);
+  memcpy(copy, mtx, len*len);
   upper_triangle(copy, len);
   int ret = 0;
   for (int i = 0; i < len*len; i += len + 1) {

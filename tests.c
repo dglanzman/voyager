@@ -1,6 +1,7 @@
 #include "alpha.h"
 #include "arithmetic.h"
 #include "generator.h"
+#include "pgz_routines.h"
 
 extern unsigned char message[223];
 extern unsigned char codeword[255];
@@ -10,6 +11,7 @@ extern unsigned char codeword[255];
 #include <stddef.h>
 #include <setjmp.h>
 #include <cmocka.h>
+#include <string.h>
 
 static void test_sum(void ** state) {
   unsigned char result;
@@ -121,6 +123,49 @@ static void test_syndromes_1(void ** state) {
   }
 }
 
+static void test_syndromes_2(void ** state) {
+  unsigned char recv_word[255];
+  memset(recv_word, 0, sizeof recv_word);
+  recv_word[244] = alpha[0];
+  recv_word[171] = alpha[0];
+  recv_word[82] = alpha[0];
+  recv_word[13] = alpha[0];
+  for (int i = 0; i < sizeof recv_word; i++) {
+    recv_word[i] = sum(recv_word[i], codeword[i]);
+  }
+  unsigned char synd[32];
+  syndromes(recv_word, synd);
+  unsigned char expected_synd[32] = {
+    29, 76, 120, 157, 15, 228, 140, 95, 14, 85, 201, 186, 63,
+    67, 196, 133, 11, 84, 83, 193, 85, 159, 24, 62, 165, 60,
+    214, 200, 40, 206, 12, 2
+  };
+  for (int i = 0; i < sizeof synd; i++) {
+    assert_int_equal(synd[i], expected_synd[i]);
+  }
+}
+
+static void test_num_errors_1(void ** state) {
+  unsigned char recv_word[255];
+  memset(recv_word, 0, sizeof recv_word);
+  recv_word[244] = alpha[0];
+  recv_word[171] = alpha[0];
+  recv_word[82] = alpha[0];
+  recv_word[13] = alpha[0];
+  for (int i = 0; i < sizeof recv_word; i++) {
+    recv_word[i] = sum(recv_word[i], codeword[i]);
+  }
+  unsigned char m_synd[16 * 16];
+  unsigned char synd[32];
+  syndromes(recv_word, synd);
+  for (int y = 0; y < 16; y++)
+  for (int x = 0; x < 16; x++) {
+    m_synd[y * 16 + x] = synd[x + y];
+  }
+  int errors = num_errors(m_synd, 16);
+  assert_int_equal(errors, 4);
+}
+
 int main() {
   gen_log_tables();
   init_generator();
@@ -145,6 +190,8 @@ int main() {
     cmocka_unit_test(test_polydiv_2),
     cmocka_unit_test(test_polydiv_3),
     cmocka_unit_test(test_syndromes_1),
+    cmocka_unit_test(test_syndromes_2),
+    cmocka_unit_test(test_num_errors_1),
   };
 
   return cmocka_run_group_tests(tests, NULL, NULL);
