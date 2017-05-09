@@ -175,3 +175,13 @@ void solve(unsigned char * A, unsigned char * sol, unsigned char * b,
   }
   free(m);
 }
+
+void chien_search(unsigned char * factors, unsigned char * locations, size_t nu) {
+  int idx = 0;
+  for (int i = 1; i < 256; i++) {
+    if (poly_eval(factors, nu+1, i)) {
+      locations[idx] = divide(alpha[0], i);
+      idx++;
+    }
+  }
+}
