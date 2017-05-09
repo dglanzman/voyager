@@ -182,6 +182,22 @@ static void test_solve(void ** state) {
   }
 }
 
+static void test_correct(void ** state) {
+  unsigned char recv_word[255];
+  memset(recv_word, 0, sizeof recv_word);
+  recv_word[244] = alpha[0];
+  recv_word[171] = alpha[0];
+  recv_word[82] = alpha[0];
+  recv_word[13] = alpha[0];
+  for (int i = 0; i < sizeof recv_word; i++) {
+    recv_word[i] = sum(recv_word[i], codeword[i]);
+  }
+  assert_int_equal(correct(recv_word), 4);
+  for (int i = 0; i < 255; i++) {
+    assert_int_equal(recv_word[i], codeword[i]);
+  }
+}
+
 int main() {
   gen_log_tables();
   init_generator();
@@ -209,6 +225,7 @@ int main() {
     cmocka_unit_test(test_syndromes_2),
     cmocka_unit_test(test_num_errors_1),
     cmocka_unit_test(test_solve),
+    cmocka_unit_test(test_correct),
   };
 
   return cmocka_run_group_tests(tests, NULL, NULL);

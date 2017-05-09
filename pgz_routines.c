@@ -185,3 +185,32 @@ void chien_search(unsigned char * factors, unsigned char * locations, size_t nu)
     }
   }
 }
+
+int correct(unsigned char * recv_word) {
+  unsigned char s[32];
+  unsigned char sm[16*16];
+  unsigned char locators[16];
+  unsigned char lm[16*16];
+  unsigned char errors[16];
+  unsigned char loc_poly[17];
+  syndromes(recv_word, s);
+  for (int y = 0; y < 16; y++)
+  for (int x = 0; x < 16; x++) {
+    sm[16 * y + x] = s[x + y];
+  }
+  int len = num_errors(sm, 16);
+  if (!len) return 0;
+  solve(sm, locators, s+16, len);
+  loc_poly[0] = alpha[0];
+  for (int i = 1; i < len+1; i++) loc_poly[i] = locators[len - i];
+  chien_search(loc_poly, locators, len);
+  for (int x = 0; x < len; x++) lm[x] = locators[x];
+  for (int y = 1; y < len; y++)
+  for (int x = 0; x < len; x++) {
+    lm[y * len + x] = multiply(locators[x], lm[(y-1) * len + x]);
+  }
+  solve(lm, errors, s, len);
+  for (int i = 0; i < len; i++) {
+    recv_word[poly[locators[i]]] = errors[i];
+  }
+}
