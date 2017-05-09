@@ -179,7 +179,7 @@ void solve(unsigned char * A, unsigned char * sol, unsigned char * b,
 void chien_search(unsigned char * factors, unsigned char * locations, size_t nu) {
   int idx = 0;
   for (int i = 1; i < 256; i++) {
-    if (poly_eval(factors, nu+1, i)) {
+    if (!poly_eval(factors, nu+1, i)) {
       locations[idx] = divide(alpha[0], i);
       idx++;
     }
@@ -200,7 +200,7 @@ int correct(unsigned char * recv_word) {
   }
   int len = num_errors(sm, 16);
   if (!len) return 0;
-  solve(sm, locators, s+16, len);
+  solve(sm, locators, s+len, len);
   loc_poly[0] = alpha[0];
   for (int i = 1; i < len+1; i++) loc_poly[i] = locators[len - i];
   chien_search(loc_poly, locators, len);
