@@ -8,6 +8,7 @@ unsigned char generator_matrix[223*255];
 void init_generator() {
   unsigned char conv_matrix[33*33];
   unsigned char input[2];
+  gen_log_tables();
   generator_polynomial[0] = alpha[0];
   input[1] = alpha[0];
   for (int i = 1; i < 33; i++) {

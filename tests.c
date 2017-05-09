@@ -199,7 +199,6 @@ static void test_correct(void ** state) {
 }
 
 int main() {
-  gen_log_tables();
   init_generator();
   for (int i = 0; i < sizeof message / 2; i++) {
     unsigned char tmp = message[i];
