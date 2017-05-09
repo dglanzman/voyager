@@ -6,7 +6,7 @@ all: decoder encoder tests
 encoder: encoder.o arithmetic.o alpha.o generator.o
 	c99 -g -o $@ $^
 
-decoder: decoder.o arithmetic.o alpha.o pgz_routines.o
+decoder: decoder.o arithmetic.o alpha.o pgz_routines.o generator.o
 	c99 -g -o $@ $^
 
 tests: arithmetic.o alpha.o tests.o generator.o test_message.o test_codeword.o \

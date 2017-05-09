@@ -6,9 +6,10 @@
 #include "alpha.h"
 #include "arithmetic.h"
 #include "pgz_routines.h"
+#include "generator.h"
 
 int main(int argc, char * argv[]) {
-  gen_log_tables();
+  init_generator();
   int c, error = 0;
   char * ifile = NULL, * ofile = NULL;
   while((c = getopt(argc, argv, "f:o:")) != -1) {
@@ -72,7 +73,7 @@ int main(int argc, char * argv[]) {
     
     int errors = correct(codeword);
     for (int i = 0; i < errors; i++) fputc('.', stderr);
-    decode(codeword, message);
+    divide_polynomial(codeword, generator_polynomial, message, NULL, 255, 33);
     len = sizeof message;
     if (done) {
       while (len > 0 && !message[len-1]) len--;
