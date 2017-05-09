@@ -166,6 +166,22 @@ static void test_num_errors_1(void ** state) {
   assert_int_equal(errors, 4);
 }
 
+static void test_solve(void ** state) {
+  unsigned char A[16] = {
+    208, 162, 245, 245,
+    231, 0,   247, 124,
+    33,  72,  41,  205,
+    0,   140, 248, 37
+  };
+  unsigned char b[4] = {1, 2, 3, 4};
+  unsigned char s_expected[4] = {0, 131, 7, 172};
+  unsigned char s[4];
+  solve(A, s, b, 4);
+  for (int i = 0; i < sizeof s; i++) {
+    assert_int_equal(s[i], s_expected[i]);
+  }
+}
+
 int main() {
   gen_log_tables();
   init_generator();
@@ -192,6 +208,7 @@ int main() {
     cmocka_unit_test(test_syndromes_1),
     cmocka_unit_test(test_syndromes_2),
     cmocka_unit_test(test_num_errors_1),
+    cmocka_unit_test(test_solve),
   };
 
   return cmocka_run_group_tests(tests, NULL, NULL);

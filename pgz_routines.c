@@ -32,7 +32,37 @@ static void swap_rows(unsigned char * matrix, size_t len, int row1, int row2) {
     matrix[row1 * len + i] = matrix[row2 * len + i];
     matrix[row2 * len + i] = tmp;
   }
-} 
+}
+
+static void norm_row(unsigned char * row, size_t len) {
+  int state = 0;
+  unsigned char lead_factor = 0;
+  for (int i = 0; i < len; i++) {
+    if (state == 0) {
+      if (!row[i]) continue;
+      lead_factor = row[i];
+      row[i] = alpha[0];
+      state++;
+    } else if (state == 1) {
+      row[i] = divide(row[i], lead_factor);
+    }
+  }
+}
+
+static void kill_row(unsigned char * ref, unsigned char * dest, size_t len) {
+  int state = 0;
+  unsigned char lead_factor = 0;
+  for (int i = 0; i < len; i++) {
+    if (state == 0) {
+      if (!ref[i]) continue;
+      lead_factor = dest[i];
+      dest[i] = 0;
+      state++;
+    } else if (state == 1) {
+      dest[i] = sum(multiply(ref[i], lead_factor), dest[i]);
+    }
+  }
+}
 
 static void sort_rows(unsigned char * m, size_t len) {
   size_t init = 0;
@@ -102,10 +132,46 @@ int num_errors(unsigned char * syn_mtx, size_t len) {
       for (int x = 0; x < len-1; x++) {
         int j = y * len + x;
         syn_mtx[i] = syn_mtx[j];
+        i++;
       }
       len--;
     } else {
       return len;
     }
   }
+}
+
+void solve(unsigned char * A, unsigned char * sol, unsigned char * b,
+  size_t len) {
+  unsigned char * m = malloc(len*(len+1));
+  if (!m) abort();
+  for (int y = 0; y < len; y++)
+  for (int x = 0; x < len; x++)
+    m[y * (len+1) + x] = A[y * len + x];
+  for (int i = 0; i < len; i++) {
+    m[i * (len+1) + len] = b[i];
+  }
+  memset(sol, 0, len);
+  for (int x = 0; x < len+1; x++) {
+    int found_row = -1;
+    for (int y = 0; y < len; y++) {
+      if (m[y * (len+1) + x] && !sol[y]) {
+        found_row = y;
+        sol[y] = 1;
+        break;
+      }
+    }
+    if (found_row == -1) continue;
+    norm_row(&m[found_row * (len+1)], len+1);
+    for (int y = 0; y < len; y++) {
+      if (!m[y * (len+1) + x]) continue;
+      else if (y == found_row) continue;
+      kill_row(&m[found_row * (len+1)], &m[y * (len+1)], len+1);
+    }
+  }
+  for (int y = 0; y < len; y++)
+  for (int x = 0; x < len; x++) {
+    if (m[y * (len+1) + x]) sol[x] = m[y * (len+1) + len];
+  }
+  free(m);
 }
