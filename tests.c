@@ -182,6 +182,27 @@ static void test_solve(void ** state) {
   }
 }
 
+static void test_chien(void ** state) {
+  unsigned char poly[5];
+  unsigned char polym[5*5];
+  unsigned char input[2];
+  unsigned char roots[4] = {110, 52, 19, 3};
+  unsigned char inv_roots[4];
+  for (int i = 0; i < 4; i++) inv_roots[i] = divide(alpha[0], roots[i]);
+  memset(poly, 0, sizeof poly);
+  poly[0] = alpha[0];
+  input[0] = alpha[0];
+  for (int i = 1; i < 5; i++) {
+    input[1] = inv_roots[i-1];
+    gen_conv_matrix(input, polym, 1, i);
+    inner_product_set(poly,  polym, poly, i, i+1);
+  }
+  chien_search(poly, inv_roots, sizeof inv_roots);
+  for (int i = 0; i < 4; i++) {
+    assert_int_equal(inv_roots[i], roots[i]);
+  }
+}
+
 static void test_correct(void ** state) {
   unsigned char recv_word[255];
   memset(recv_word, 0, sizeof recv_word);
@@ -224,6 +245,7 @@ int main() {
     cmocka_unit_test(test_syndromes_2),
     cmocka_unit_test(test_num_errors_1),
     cmocka_unit_test(test_solve),
+    cmocka_unit_test(test_chien),
     cmocka_unit_test(test_correct),
   };
 
