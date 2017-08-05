@@ -1,0 +1,11 @@
+language: c
+
+addons:
+  apt:
+    packages:
+      - pkg-config
+      - libcmocka-dev
+
+script:
+  - make
+  - ./tests
