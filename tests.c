@@ -182,6 +182,13 @@ static void test_solve(void ** state) {
   }
 }
 
+static int comp(const void * a, const void * b) {
+  const unsigned char * x, * y;
+  x = a;
+  y = b;
+  return *x < *y ? -1 : *x > *y ? 1 : 0;
+}
+
 static void test_chien(void ** state) {
   unsigned char poly[5];
   unsigned char polym[5*5];
@@ -191,13 +198,15 @@ static void test_chien(void ** state) {
   for (int i = 0; i < 4; i++) inv_roots[i] = divide(alpha[0], roots[i]);
   memset(poly, 0, sizeof poly);
   poly[0] = alpha[0];
-  input[0] = alpha[0];
+  input[1] = alpha[0];
   for (int i = 1; i < 5; i++) {
-    input[1] = inv_roots[i-1];
+    input[0] = inv_roots[i-1];
     gen_conv_matrix(input, polym, 1, i);
     inner_product_set(poly,  polym, poly, i, i+1);
   }
   chien_search(poly, inv_roots, sizeof inv_roots);
+  qsort(inv_roots, sizeof inv_roots, 1, comp);
+  qsort(roots, sizeof roots, 1, comp);
   for (int i = 0; i < 4; i++) {
     assert_int_equal(inv_roots[i], roots[i]);
   }
