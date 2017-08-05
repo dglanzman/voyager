@@ -3,18 +3,31 @@ language: c
 sudo: required
 
 before_install:
-  # install cmocka
+  # build cmocka
   - mkdir cmocka_build
   - wget https://cmocka.org/files/1.1/cmocka-1.1.1.tar.xz
   - xz -d cmocka-1.1.1.tar.xz
   - tar -x < cmocka-1.1.1.tar
+  - rm cmocka-1.1.1.tar
   - cd cmocka_build
   - cmake ../cmocka-1.1.1
   - make
-  - sudo make install
   - cd ..
+
+install: 
+  # install cmocka
+  - cd cmocka_build
+  - sudo make install
   - sudo ldconfig
+  - cd ..
+
+before_script:
+  # make voyager
+  - make
 
 script:
-  - make
+  # run tests
   - ./tests
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
