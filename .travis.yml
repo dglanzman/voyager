@@ -28,6 +28,7 @@ before_script:
 script:
   # run tests
   - ./tests
+  - valgrind --leak-check=full --error-exitcode=1 ./tests
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
