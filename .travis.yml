@@ -2,6 +2,9 @@ language: c
 
 sudo: required
 
+notifications:
+  email: false
+
 before_install:
   # build cmocka
   - mkdir cmocka_build
@@ -33,6 +36,8 @@ install:
   - cd valgrind-3.13.0
   - sudo make install
   - cd ..
+  # install libc debugging symbols for valgrind
+  sudo apt-get -y install libc6-dbg
 
 before_script:
   # make voyager
