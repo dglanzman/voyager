@@ -37,7 +37,7 @@ install:
   - sudo make install
   - cd ..
   # install libc debugging symbols for valgrind
-  sudo apt-get -y install libc6-dbg
+  - sudo apt-get -y install libc6-dbg
 
 before_script:
   # make voyager
