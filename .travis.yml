@@ -14,11 +14,10 @@ before_install:
   - make
   - cd ..
   # build valgrind
-  - mkdir valgrind_build
-  - cd valgrind_build
   - wget ftp://sourceware.org/pub/valgrind/valgrind-3.13.0.tar.bz2
   - bzip2 -d valgrind-3.13.0.tar.bz2
   - tar -x < valgrind-3.13.0.tar
+  - rm valgrind-3.13.0.tar
   - cd valgrind-3.13.0
   - ./configure
   - make
