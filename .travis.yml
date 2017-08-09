@@ -42,7 +42,7 @@ install:
 before_script:
   # make coverage build
   - make clean
-  - make debug_info="-coverage -g"
+  - make debug_info="-coverage -g" optimizations="-O0"
   - mv tests tests_cov
   # make performance build
   - make clean
