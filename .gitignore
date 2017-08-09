@@ -5,3 +5,7 @@ decoder
 noise
 tests
 tags
+*.gcov
+*.gcda
+*.gcno
+*.exe

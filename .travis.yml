@@ -40,13 +40,22 @@ install:
   - sudo apt-get -y install libc6-dbg
 
 before_script:
-  # make voyager
-  - make
+  # make coverage build
+  - make clean
+  - make debug_info="-coverage -g"
+  - mv tests tests_cov
+  # make performance build
+  - make clean
+  - make optimizations="-O3"
+  - mv tests tests_perf
 
 script:
-  # run tests
-  - ./tests
-  - valgrind --leak-check=full --error-exitcode=1 ./tests
+  # run performance tests
+  - ./tests_perf
+  - valgrind --leak-check=full --error-exitcode=1 ./tests_perf
+  # run coverage tests
+  - ./tests_cov
+  - gcov generator.c alpha.c pgz_routines.c arithmetic.c
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
