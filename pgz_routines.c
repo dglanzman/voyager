@@ -214,4 +214,5 @@ int correct(unsigned char * recv_word) {
   for (int i = 0; i < len; i++) {
     recv_word[poly[locators[i]]] = sum(recv_word[poly[locators[i]]], errors[i]);
   }
+  return len;
 }
