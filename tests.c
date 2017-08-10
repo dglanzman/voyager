@@ -166,6 +166,18 @@ static void test_num_errors_1(void ** state) {
   assert_int_equal(errors, 4);
 }
 
+static void test_num_errors_2(void ** state) {
+  unsigned char s[16];
+  memset(s, 0, sizeof s);
+  s[3] = 1;
+  s[5] = 1;
+  s[7] = 1;
+  s[10] = 1;
+  s[12] = 1;
+  int errors = num_errors(s, 4);
+  assert_int_equal(errors, 0);
+}
+
 static void test_solve(void ** state) {
   unsigned char A[16] = {
     208, 162, 245, 245,
@@ -253,6 +265,7 @@ int main() {
     cmocka_unit_test(test_syndromes_1),
     cmocka_unit_test(test_syndromes_2),
     cmocka_unit_test(test_num_errors_1),
+    cmocka_unit_test(test_num_errors_2),
     cmocka_unit_test(test_solve),
     cmocka_unit_test(test_chien),
     cmocka_unit_test(test_correct),

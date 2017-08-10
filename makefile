@@ -20,6 +20,9 @@ pgz_routines.o
 
 clean:
 	rm -f *.o
+	rm -f *.gcov
+	rm -f *.gcda
+	rm -f *.gcno
 	rm -f encoder
 	rm -f decoder
 	rm -f tests
