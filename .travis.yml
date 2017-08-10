@@ -58,4 +58,5 @@ script:
   - gcov generator.c alpha.c pgz_routines.c arithmetic.c
 
 after_success:
+  - ls
   - bash <(curl -s https://codecov.io/bash)
