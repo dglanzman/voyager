@@ -18,14 +18,16 @@ tests: arithmetic.o alpha.o tests.o generator.o test_message.o test_codeword.o \
 pgz_routines.o
 	c99 $(CFLAGS) -o $@ $^ `pkg-config --cflags --libs cmocka`
 
-clean:
-	rm -f *.o
+clean_coverage:
 	rm -f *.gcov
 	rm -f *.gcda
 	rm -f *.gcno
+
+clean:
+	rm -f *.o
 	rm -f encoder
 	rm -f decoder
 	rm -f tests
 	rm -f hamlet.rs
 
-.PHONY: clean
+.PHONY: clean clean_coverage

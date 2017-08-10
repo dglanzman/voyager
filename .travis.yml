@@ -42,7 +42,7 @@ install:
 before_script:
   # make coverage build
   - make clean
-  - make debug_info="-coverage -g" optimizations="-O0"
+  - make debug_info="--coverage -g" optimizations="-O0"
   - mv tests tests_cov
   # make performance build
   - make clean
@@ -58,5 +58,4 @@ script:
   - gcov generator.c alpha.c pgz_routines.c arithmetic.c
 
 after_success:
-  - ls
   - bash <(curl -s https://codecov.io/bash)
