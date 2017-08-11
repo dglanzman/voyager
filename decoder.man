@@ -5,7 +5,7 @@ decoder \- decoder for the Voyager's Reed-Solomon code
 \fBdecoder\fP [ -f \fIinfile\fP ] [-o \fIoutfile\fP ]
 .SH DESCRIPTION
 \fBdecoder\fP decodes a transmission of codewords using the Voyager Probe's
-Reed-Solomon code, which uses codewords of 223 bytes for messages of 255 bytes
+Reed-Solomon code, which uses codewords of 255 bytes for messages of 233 bytes.
 \fBnoise\fP can introduce errors to the codewords, and \fBencode\fP can
 produce codewords from a plaintext message. The decoder will write to standard
 error for any codewords it recieves that it cannot decode.
