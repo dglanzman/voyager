@@ -50,7 +50,7 @@ int main(int argc, char * argv[]) {
     }
   }
 
-  char message[223], codeword[225];
+  char message[223], codeword[255];
   errno = 0;
   int done = 0;
   for (;;) {
