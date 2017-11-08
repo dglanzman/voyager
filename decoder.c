@@ -53,30 +53,46 @@ int main(int argc, char * argv[]) {
   char message[223], codeword[255];
   errno = 0;
   int done = 0;
-  for (;;) {
-    size_t len = fread(codeword, 1, sizeof codeword, in);
-    if (len != 255) {
-      if (errno) {
-        perror("reading input file");
-        if (ifile) fclose(in);
-        if (ofile) fclose(out);
-        return 2;
-      } else if (len != 0) {
-        fprintf(stderr, "Encoded message not multiple of 255 bytes, aborting.");
-        if (ifile) fclose(in);
-        if (ofile) fclose(out);
-        return 1;
-      } else {
-        done = 1;
-      }
+  size_t len = fread(codeword, 1, sizeof codeword, in);
+  if (len != 255) {
+    if (errno) {
+      perror("reading input file");
+      if (ifile) fclose(in);
+      if (ofile) fclose(out);
+      return 2;
+    } else if (len != 0) {
+      fprintf(stderr, "Encoded message not multiple of 255 bytes, aborting.");
+      if (ifile) fclose(in);
+      if (ofile) fclose(out);
+      return 1;
+    } else {
+      if (ifile) fclose(in);
+      if (ofile) fclose(out);
+      return 0;
     }
+  }
+  for (;;) {
     
     int errors = correct(codeword);
     for (int i = 0; i < errors; i++) fputc('.', stderr);
     divide_polynomial(codeword, generator_polynomial, message, NULL, 255, 33);
-    len = sizeof message;
-    if (done) {
+    len = fread(codeword, 1, sizeof codeword, in);
+    if (errno) {
+      perror("reading input file");
+      if (ifile) fclose(in);
+      if (ofile) fclose(out);
+      return 2;
+    } else if (len != 255 && len != 0) {
+      fprintf(stderr, "Encoded message not multiple of 255 bytes, aborting.");
+      if (ifile) fclose(in);
+      if (ofile) fclose(out);
+      return 1;
+    } else if (len == 0) {
+      done = 1;
+      len = sizeof message;
       while (len > 0 && !message[len-1]) len--;
+    } else {
+      len = sizeof message;
     }
     fwrite(message, 1, len, out);
     if (errno) {
