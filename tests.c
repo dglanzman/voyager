@@ -240,8 +240,34 @@ static void test_correct(void ** state) {
   }
 }
 
+static void test_single_word_with_errors(void ** state) {
+  unsigned char recv_word[255];
+  unsigned char errors[255];
+  unsigned char text[223];
+  unsigned char recv_text[223];
+  memset(recv_word, 0, sizeof recv_word);
+  memset(text, 0, sizeof text);
+  for (int i = 0; i < sizeof text / 13; i++) {
+    memcpy(text + i * 13, "Hello World! ", 13);
+  }
+  inner_product_set(recv_word, generator_matrix, text, 223, 255);
+  errors[244] = alpha[0];
+  errors[171] = alpha[0];
+  errors[82] = alpha[0];
+  errors[13] = alpha[0];
+  for (int i = 0; i < sizeof recv_word; i++) {
+    recv_word[i] = sum(recv_word[i], errors[i]);
+  }
+  assert_int_equal(correct(recv_word), 4);
+  divide_polynomial(recv_word, generator_polynomial, recv_text, NULL, 255, 33);
+  for (int i = 0; i < 233; i++) {
+    assert_int_equal(recv_text[i], text[i]);
+  }
+}
+
 int main() {
   init_generator();
+  
   for (int i = 0; i < sizeof message / 2; i++) {
     unsigned char tmp = message[i];
     message[i] = message[sizeof message - 1 - i];
@@ -269,6 +295,7 @@ int main() {
     cmocka_unit_test(test_solve),
     cmocka_unit_test(test_chien),
     cmocka_unit_test(test_correct),
+    cmocka_unit_test(test_single_word_with_errors),
   };
 
   return cmocka_run_group_tests(tests, NULL, NULL);
